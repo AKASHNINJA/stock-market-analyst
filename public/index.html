@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Global Market Analyst | SEBI Registered Research Advisor</title>
+  <title>Stock Market Analyst Dashboard | Professional Market Intelligence</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Load ApexCharts & Lucide Icons via CDN -->
+  <!-- Load CDNs -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -15,42 +15,42 @@
   <!-- Offline Status Alert Banner -->
   <div id="offline-banner" class="offline-banner hidden">
     <i data-lucide="wifi-off"></i>
-    <span>Connection lost. Displaying cached analysis (offline mode).</span>
+    <span>Working offline. Displaying cached stock data and reviews.</span>
   </div>
 
-  <!-- SEBI Regulatory Warning & Info Header -->
-  <div class="regulatory-ribbon">
-    <div class="ribbon-content">
-      <span class="badge red">COMPLIANCE NOTICE</span>
-      <span class="text">SEBI Registered Research Analyst Reg No: <strong>INH000012345</strong>. Equity investments are subject to market risks. Read all scheme related documents carefully before investing.</span>
-    </div>
-  </div>
+  <!-- Corporate Header Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <i data-lucide="trending-up" class="logo-icon"></i>
+        <div>
+          <h2>MarketAnalyst</h2>
+          <span class="sub">Professional Market Reviews & Indicators</span>
+        </div>
+      </div>
+      
+      <nav class="header-nav">
+        <a href="#" class="active">Market Dashboard</a>
+        <a href="#">Watchlist Portfolio</a>
+        <a href="#">Screener</a>
+        <a href="#">Sector Matrix</a>
+      </nav>
 
-  <!-- Top Global Indices Bar -->
-  <div class="indices-marquee">
-    <div class="indices-container" id="indices-container">
-      <div class="index-card" id="idx-nifty">
-        <span class="index-name">NIFTY 50</span>
-        <span class="index-price">22,120.40</span>
-        <span class="index-change positive">+0.84%</span>
-      </div>
-      <div class="index-card" id="idx-sp500">
-        <span class="index-name">S&P 500</span>
-        <span class="index-price">5,137.08</span>
-        <span class="index-change positive">+1.12%</span>
-      </div>
-      <div class="index-card" id="idx-hsi">
-        <span class="index-name">HANG SENG</span>
-        <span class="index-price">16,589.44</span>
-        <span class="index-change negative">-0.42%</span>
-      </div>
-      <div class="index-card" id="idx-sti">
-        <span class="index-name">STRAITS TIMES</span>
-        <span class="index-price">3,142.10</span>
-        <span class="index-change positive">+0.18%</span>
+      <!-- Global Indices Bar (Compact inside Header) -->
+      <div class="indices-container-header" id="indices-container">
+        <div class="index-badge" id="idx-nifty">
+          <span class="name">NIFTY 50</span>
+          <span class="price">22,120.40</span>
+          <span class="change positive">+0.84%</span>
+        </div>
+        <div class="index-badge" id="idx-sp500">
+          <span class="name">S&P 500</span>
+          <span class="price">5,137.08</span>
+          <span class="change positive">+1.12%</span>
+        </div>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- Main Dashboard App Shell -->
   <main class="dashboard-shell">
@@ -58,17 +58,9 @@
     <!-- Left Sidebar: Search, Markets & Watchlist -->
     <aside class="sidebar">
       
-      <!-- App Brand Logo -->
-      <div class="brand">
-        <i data-lucide="trending-up" class="logo-icon"></i>
-        <div>
-          <h2>MarketAnalyst</h2>
-          <span class="sub">Dalal & Wall Street Research</span>
-        </div>
-      </div>
-
       <!-- Search Box Section -->
-      <div class="search-box">
+      <div class="search-box card">
+        <h3>Search Markets</h3>
         <div class="input-wrapper">
           <i data-lucide="search" class="search-icon"></i>
           <input type="text" id="ticker-search" placeholder="Search Ticker (e.g. AAPL, RELIANCE)..." autocomplete="off">
@@ -77,27 +69,27 @@
         <div id="autocomplete-results" class="autocomplete-dropdown hidden"></div>
       </div>
 
-      <!-- Market Selector & Preset Lists -->
-      <div class="sidebar-section">
-        <h3>Market Region</h3>
+      <!-- Market Selector -->
+      <div class="sidebar-section card">
+        <h3>Regions</h3>
         <div class="market-tabs">
           <button class="market-tab active" data-region="IN">India</button>
           <button class="market-tab" data-region="US">USA</button>
-          <button class="market-tab" data-region="HK">H. Kong</button>
-          <button class="market-tab" data-region="SG">S'pore</button>
+          <button class="market-tab" data-region="HK">Hong Kong</button>
+          <button class="market-tab" data-region="SG">Singapore</button>
         </div>
       </div>
 
-      <!-- Quick Track presets -->
-      <div class="sidebar-section">
-        <h3>Institutional Active List</h3>
+      <!-- Quick Preset Lists -->
+      <div class="sidebar-section card">
+        <h3>Active Stock Lists</h3>
         <div class="preset-list" id="preset-list">
-          <!-- Populated by JS based on selected region -->
+          <!-- Populated by JS -->
         </div>
       </div>
 
       <!-- Watchlist Section -->
-      <div class="sidebar-section watchlist-section">
+      <div class="sidebar-section card watchlist-section">
         <div class="section-header">
           <h3>Your Watchlist</h3>
           <span class="count" id="watchlist-count">0 Stocks</span>
@@ -113,7 +105,7 @@
     <section class="main-content">
       
       <!-- Active Stock Header -->
-      <div class="active-stock-header glass-card">
+      <div class="active-stock-header card">
         <div class="stock-info-left">
           <div class="title-row">
             <h1 id="stock-name">Select a Stock</h1>
@@ -135,7 +127,7 @@
       </div>
 
       <!-- Main Chart Card -->
-      <div class="chart-card glass-card">
+      <div class="chart-card card">
         <div class="chart-header">
           <h2>Technical Price Action</h2>
           <div class="chart-ranges" id="chart-ranges">
@@ -149,11 +141,11 @@
       </div>
 
       <!-- Dynamic 1-Page Analysis & Recommendation Dashboard -->
-      <div class="analysis-dashboard glass-card" id="analysis-dashboard">
+      <div class="analysis-dashboard card" id="analysis-dashboard">
         <div class="dashboard-grid-header">
           <div class="headline-container">
-            <h2>Comprehensive 1-Page Research Report</h2>
-            <p class="report-meta">Registered Analyst: A. Akash | SEBI Reg No: INH000012345</p>
+            <h2>Comprehensive 1-Page Market Report</h2>
+            <p class="report-meta">Automated Technical & Fundamental Review</p>
           </div>
           <div class="audit-sources" id="audit-sources">
             <span class="sources-label">Sources:</span>
@@ -182,13 +174,13 @@
             </div>
             <div class="pillar-body">
               <div class="metric-row">
-                <span class="metric-label">Revenue CAGR</span>
+                <span class="metric-label">CAGR Growth</span>
                 <span class="metric-value positive" id="metric-cagr">--.--%</span>
               </div>
               <div class="bar-chart-mock" id="past-revenues-chart">
                 <!-- Bar growth indicators populated dynamically -->
               </div>
-              <p class="pillar-desc">Evaluates historical sales compounding rate over the past three fiscal periods.</p>
+              <p class="pillar-desc">Evaluates historical compounded sales performance over the past three fiscal periods.</p>
             </div>
           </div>
 
@@ -224,7 +216,7 @@
               <h4>3. Future Growth</h4>
             </div>
             <div class="pillar-body">
-              <p class="growth-text" id="growth-catalyst">Select a stock to fetch business triggers, upcoming capacity CAPEX, and structural tailwinds.</p>
+              <p class="growth-text" id="growth-catalyst">Select a stock to fetch business triggers, capacity upgrades, and structural tailwinds.</p>
               <div class="bullet-tag">Catalyst Focus</div>
             </div>
           </div>
@@ -295,16 +287,9 @@
           </div>
         </div>
 
-        <!-- SEBI Registry Verification Badge -->
-        <div class="verification-badge-container">
-          <div class="sebi-stamp">
-            <i data-lucide="shield-check"></i>
-            <div>
-              <span class="stamp-title">SEBI REGISTERED RESEARCH ANALYST</span>
-              <span class="stamp-no">Registration Number: INH000012345</span>
-            </div>
-          </div>
-          <p class="disclaimer-note">Disclosure: The Research recommendations/model portfolios are prepared based on statistical models. Akash and its representatives do not own positions or trade in recommended securities at the time of report generation. Investments are subject to high volatility.</p>
+        <!-- Disclaimer Footer -->
+        <div class="disclaimer-container">
+          <p class="disclaimer-note">Disclaimer: The analysis and model research recommendations displayed are generated using quantitative screening templates and are for informational and educational purposes only. They do not constitute personalized investment advice, a solicitation, or an offer to buy or sell securities. Equity investments carry substantial market volatility risks. Please conduct independent verification and read all associated offer files carefully before trading.</p>
         </div>
 
       </div>
@@ -314,7 +299,7 @@
   </main>
 
   <footer class="app-footer">
-    <p>&copy; 2026 MarketAnalyst Research. Registered office: Dalal Street, Mumbai, India. Compliance Officer: A. Akash. Support: compliance@marketanalyst.in</p>
+    <p>&copy; 2026 MarketAnalyst Research. All rights reserved. Platform optimized for low-bandwidth and progressive offline execution.</p>
   </footer>
 
   <script src="app.js"></script>

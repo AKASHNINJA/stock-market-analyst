@@ -312,7 +312,6 @@ function renderQuoteData(quote) {
   updateWatchlistToggleButton();
   
   // Render Financial CAGRs
-  document.getElementById('metric-cagr').textContent = quote.revenues.length > 0 ? `+${(Math.random()*6 + 10).toFixed(1)}%` : '--%';
   renderRevenueBarChart(quote.revenues);
 }
 
@@ -637,13 +636,13 @@ function toggleAudioBrief() {
 
   // Build the script
   const scriptText = `
-    Here is the SEBI registered research analyst report for ${name}. 
+    Here is the research analyst report for ${name}. 
     Ticker is currently trading at ${price}, reflecting a change of ${change}. 
     Our quantitative research signal recommends ${reco}. 
     The suggested entry price range is ${entry}, with a medium-term target price of ${target}, 
     and strict stop-loss safety zone placed at ${sl}. 
     Our analytical breakdown: ${rationale}.
-    This concludes the compliance recommendation. All stock trading contains risk. Please review detailed disclosures.
+    This concludes the research recommendation. All stock trading contains risk. Please review detailed disclosures.
   `;
 
   speechUtterance = new SpeechSynthesisUtterance(scriptText);
