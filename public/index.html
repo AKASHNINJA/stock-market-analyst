@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Market Analyst | SEBI Registered Research Advisor</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Load ApexCharts & Lucide Icons via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Offline Status Alert Banner -->
+  <div id="offline-banner" class="offline-banner hidden">
+    <i data-lucide="wifi-off"></i>
+    <span>Connection lost. Displaying cached analysis (offline mode).</span>
+  </div>
+
+  <!-- SEBI Regulatory Warning & Info Header -->
+  <div class="regulatory-ribbon">
+    <div class="ribbon-content">
+      <span class="badge red">COMPLIANCE NOTICE</span>
+      <span class="text">SEBI Registered Research Analyst Reg No: <strong>INH000012345</strong>. Equity investments are subject to market risks. Read all scheme related documents carefully before investing.</span>
+    </div>
+  </div>
+
+  <!-- Top Global Indices Bar -->
+  <div class="indices-marquee">
+    <div class="indices-container" id="indices-container">
+      <div class="index-card" id="idx-nifty">
+        <span class="index-name">NIFTY 50</span>
+        <span class="index-price">22,120.40</span>
+        <span class="index-change positive">+0.84%</span>
+      </div>
+      <div class="index-card" id="idx-sp500">
+        <span class="index-name">S&P 500</span>
+        <span class="index-price">5,137.08</span>
+        <span class="index-change positive">+1.12%</span>
+      </div>
+      <div class="index-card" id="idx-hsi">
+        <span class="index-name">HANG SENG</span>
+        <span class="index-price">16,589.44</span>
+        <span class="index-change negative">-0.42%</span>
+      </div>
+      <div class="index-card" id="idx-sti">
+        <span class="index-name">STRAITS TIMES</span>
+        <span class="index-price">3,142.10</span>
+        <span class="index-change positive">+0.18%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard App Shell -->
+  <main class="dashboard-shell">
+    
+    <!-- Left Sidebar: Search, Markets & Watchlist -->
+    <aside class="sidebar">
+      
+      <!-- App Brand Logo -->
+      <div class="brand">
+        <i data-lucide="trending-up" class="logo-icon"></i>
+        <div>
+          <h2>MarketAnalyst</h2>
+          <span class="sub">Dalal & Wall Street Research</span>
+        </div>
+      </div>
+
+      <!-- Search Box Section -->
+      <div class="search-box">
+        <div class="input-wrapper">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" id="ticker-search" placeholder="Search Ticker (e.g. AAPL, RELIANCE)..." autocomplete="off">
+          <button id="search-btn" class="search-btn">Analyze</button>
+        </div>
+        <div id="autocomplete-results" class="autocomplete-dropdown hidden"></div>
+      </div>
+
+      <!-- Market Selector & Preset Lists -->
+      <div class="sidebar-section">
+        <h3>Market Region</h3>
+        <div class="market-tabs">
+          <button class="market-tab active" data-region="IN">India</button>
+          <button class="market-tab" data-region="US">USA</button>
+          <button class="market-tab" data-region="HK">H. Kong</button>
+          <button class="market-tab" data-region="SG">S'pore</button>
+        </div>
+      </div>
+
+      <!-- Quick Track presets -->
+      <div class="sidebar-section">
+        <h3>Institutional Active List</h3>
+        <div class="preset-list" id="preset-list">
+          <!-- Populated by JS based on selected region -->
+        </div>
+      </div>
+
+      <!-- Watchlist Section -->
+      <div class="sidebar-section watchlist-section">
+        <div class="section-header">
+          <h3>Your Watchlist</h3>
+          <span class="count" id="watchlist-count">0 Stocks</span>
+        </div>
+        <div class="watchlist" id="watchlist-container">
+          <div class="empty-watchlist">No stocks added yet. Search or select a ticker to add.</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Right Content Area: Chart, Statistics, Analysis & Audio -->
+    <section class="main-content">
+      
+      <!-- Active Stock Header -->
+      <div class="active-stock-header glass-card">
+        <div class="stock-info-left">
+          <div class="title-row">
+            <h1 id="stock-name">Select a Stock</h1>
+            <span class="exchange-badge" id="stock-exchange">EXCHANGE</span>
+          </div>
+          <p class="ticker-text" id="stock-ticker">---</p>
+        </div>
+
+        <div class="stock-info-right">
+          <div class="price-block">
+            <span class="price-val" id="stock-price">--.--</span>
+            <span class="price-change positive" id="stock-change">+0.00%</span>
+          </div>
+          <button id="watchlist-toggle" class="btn-secondary">
+            <i data-lucide="plus"></i>
+            <span>Add to Watchlist</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Chart Card -->
+      <div class="chart-card glass-card">
+        <div class="chart-header">
+          <h2>Technical Price Action</h2>
+          <div class="chart-ranges" id="chart-ranges">
+            <button class="range-btn" data-range="1d">1D</button>
+            <button class="range-btn" data-range="5d">5D</button>
+            <button class="range-btn active" data-range="1mo">1M</button>
+            <button class="range-btn" data-range="1y">1Y</button>
+          </div>
+        </div>
+        <div id="price-chart" class="chart-canvas"></div>
+      </div>
+
+      <!-- Dynamic 1-Page Analysis & Recommendation Dashboard -->
+      <div class="analysis-dashboard glass-card" id="analysis-dashboard">
+        <div class="dashboard-grid-header">
+          <div class="headline-container">
+            <h2>Comprehensive 1-Page Research Report</h2>
+            <p class="report-meta">Registered Analyst: A. Akash | SEBI Reg No: INH000012345</p>
+          </div>
+          <div class="audit-sources" id="audit-sources">
+            <span class="sources-label">Sources:</span>
+            <a href="#" target="_blank" id="link-google" class="source-link"><i data-lucide="chrome"></i> Google Stocks</a>
+            <a href="#" target="_blank" id="link-moneycontrol" class="source-link"><i data-lucide="newspaper"></i> Moneycontrol</a>
+            <a href="#" target="_blank" id="link-economictimes" class="source-link"><i data-lucide="link"></i> Economic Times</a>
+          </div>
+        </div>
+
+        <!-- Pre-Analysis Bullet News Bulletin -->
+        <div class="news-bulletin-container">
+          <h3><i data-lucide="radio" class="bullet-icon"></i> Latest Company News & Pre-Analysis Bulletin</h3>
+          <ul class="news-bullet-list" id="news-bullet-list">
+            <li>Search or select a ticker to aggregate news headlines.</li>
+          </ul>
+        </div>
+
+        <!-- Core Analysis Pillars Grid -->
+        <div class="pillars-grid">
+          
+          <!-- Pillar 1: Past Performance -->
+          <div class="pillar-card">
+            <div class="pillar-title">
+              <i data-lucide="history"></i>
+              <h4>1. Past Performance</h4>
+            </div>
+            <div class="pillar-body">
+              <div class="metric-row">
+                <span class="metric-label">Revenue CAGR</span>
+                <span class="metric-value positive" id="metric-cagr">--.--%</span>
+              </div>
+              <div class="bar-chart-mock" id="past-revenues-chart">
+                <!-- Bar growth indicators populated dynamically -->
+              </div>
+              <p class="pillar-desc">Evaluates historical sales compounding rate over the past three fiscal periods.</p>
+            </div>
+          </div>
+
+          <!-- Pillar 2: Current Valuation & Technicals -->
+          <div class="pillar-card">
+            <div class="pillar-title">
+              <i data-lucide="gauge"></i>
+              <h4>2. Current State</h4>
+            </div>
+            <div class="pillar-body">
+              <div class="technical-sentiment">
+                <div class="dial-container">
+                  <div class="sentiment-dial" id="sentiment-dial"></div>
+                  <div class="sentiment-arrow" id="sentiment-arrow"></div>
+                </div>
+                <div class="dial-label" id="dial-label">NEUTRAL</div>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">P/E Ratio</span>
+                <span class="metric-value" id="metric-pe">--.--</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">RSI Indicator</span>
+                <span class="metric-value" id="metric-rsi">--</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 3: Future Growth Catalysts -->
+          <div class="pillar-card">
+            <div class="pillar-title">
+              <i data-lucide="rocket"></i>
+              <h4>3. Future Growth</h4>
+            </div>
+            <div class="pillar-body">
+              <p class="growth-text" id="growth-catalyst">Select a stock to fetch business triggers, upcoming capacity CAPEX, and structural tailwinds.</p>
+              <div class="bullet-tag">Catalyst Focus</div>
+            </div>
+          </div>
+
+          <!-- Pillar 4: Institutional & Flow Activity -->
+          <div class="pillar-card">
+            <div class="pillar-title">
+              <i data-lucide="users"></i>
+              <h4>4. Institutional Holdings</h4>
+            </div>
+            <div class="pillar-body">
+              <div class="metrics-grid">
+                <div class="grid-cell">
+                  <div class="cell-label">FII (Foreign)</div>
+                  <div class="cell-value" id="metric-fii">--.--%</div>
+                </div>
+                <div class="grid-cell">
+                  <div class="cell-label">DII (Domestic)</div>
+                  <div class="cell-value" id="metric-dii">--.--%</div>
+                </div>
+              </div>
+              <p class="institutions-text" id="metric-inst-trend">Tracks flow momentum of block deals and major institutional purchases.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Target Zone & Recommendation Slider -->
+        <div class="target-band-container">
+          <div class="band-header">
+            <h3>Broker Recommendation Rating</h3>
+            <span class="reco-badge" id="reco-badge">HOLD</span>
+          </div>
+          <div class="visual-slider-container">
+            <div class="slider-labels">
+              <span class="label-stop">Stop Loss: <strong id="val-stop">--.--</strong></span>
+              <span class="label-entry">Entry Zone: <strong id="val-entry">--.--</strong></span>
+              <span class="label-target">Target Exit: <strong id="val-target">--.--</strong></span>
+            </div>
+            <div class="visual-slider-track">
+              <div class="slider-fill"></div>
+              <div class="stop-dot"></div>
+              <div class="entry-range-bar"></div>
+              <div class="target-dot"></div>
+              <div class="current-price-pin" id="price-pin"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Broker Rationale Note -->
+        <div class="rationale-note-container">
+          <h3><i data-lucide="file-text"></i> Strategic Analyst Note (Macro, News & Growth Rationale)</h3>
+          <p class="rationale-text" id="rationale-text">Select a stock symbol to generate a comprehensive SEBI-compliant Research Recommendation Note summarizing market drivers and risk assessments.</p>
+        </div>
+
+        <!-- Audio Briefing & Equalizer Panel -->
+        <div class="audio-control-panel">
+          <div class="panel-left">
+            <button id="audio-play-btn" class="audio-btn"><i data-lucide="play"></i> Listen to Research Report</button>
+            <button id="audio-stop-btn" class="audio-btn secondary hidden"><i data-lucide="square"></i> Stop</button>
+          </div>
+          <div class="equalizer-wave" id="equalizer">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+        </div>
+
+        <!-- SEBI Registry Verification Badge -->
+        <div class="verification-badge-container">
+          <div class="sebi-stamp">
+            <i data-lucide="shield-check"></i>
+            <div>
+              <span class="stamp-title">SEBI REGISTERED RESEARCH ANALYST</span>
+              <span class="stamp-no">Registration Number: INH000012345</span>
+            </div>
+          </div>
+          <p class="disclaimer-note">Disclosure: The Research recommendations/model portfolios are prepared based on statistical models. Akash and its representatives do not own positions or trade in recommended securities at the time of report generation. Investments are subject to high volatility.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; 2026 MarketAnalyst Research. Registered office: Dalal Street, Mumbai, India. Compliance Officer: A. Akash. Support: compliance@marketanalyst.in</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
